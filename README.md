@@ -1,4 +1,6 @@
-﻿This .NET library contains a custom `MetricServer` that allows to implement a blackbox exporter and is based on [prometheus-net](https://github.com/prometheus-net/prometheus-net).
+![Nuget](https://img.shields.io/nuget/v/prometheus-net.BlackboxMetricServer)
+
+This .NET library contains a custom `MetricServer` that allows to implement a blackbox exporter and is based on [prometheus-net](https://github.com/prometheus-net/prometheus-net).
 
 The `BlackboxMetricServer` creates an empty `CollectorRegistry` on each scrape, which is passed to the registered callbacks.
 The callback also receives the query string of the scrape request.
