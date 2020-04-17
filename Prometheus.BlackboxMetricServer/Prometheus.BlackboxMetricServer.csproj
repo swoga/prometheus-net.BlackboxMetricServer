@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+    <RootNamespace>Prometheus.BlackboxMetricServer</RootNamespace>
+
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors />
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1701;1702;1705;1591</NoWarn>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Product>prometheus-net.BlackboxMetricServer</Product>
+    <Company />
+    <Version>1.0.0</Version>
+    <AssemblyName>Prometheus.BlackboxMetricServer</AssemblyName>
+    <PackageId>prometheus-net.BlackboxMetricServer</PackageId>
+    <Authors>prometheus-net.BlackboxMetricServer authors</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/swoga/prometheus-net.BlackboxMetricServer</PackageProjectUrl>
+    <PackageTags>prometheus blackbox</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="prometheus-net" Version="3.5.0" />
+  </ItemGroup>
+
+</Project>
