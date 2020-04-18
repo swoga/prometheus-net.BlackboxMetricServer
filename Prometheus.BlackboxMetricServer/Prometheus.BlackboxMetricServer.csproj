@@ -21,6 +21,9 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/swoga/prometheus-net.BlackboxMetricServer</PackageProjectUrl>
     <PackageTags>prometheus blackbox</PackageTags>
+    <Description>This .NET library contains a custom MetricServer that allows to implement a blackbox exporter and is based on prometheus-net.
+
+The BlackboxMetricServer creates an empty CollectorRegistry on each scrape, which is passed to the registered callbacks. The callback also receives the query string of the scrape request.</Description>
   </PropertyGroup>
 
   <ItemGroup>
