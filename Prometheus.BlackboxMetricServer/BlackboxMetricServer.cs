@@ -91,13 +91,13 @@ namespace Prometheus.BlackboxMetricServer
                 {
                     while (!cancel.IsCancellationRequested)
                     {
-                            // There is no way to give a CancellationToken to GCA() so, we need to hack around it a bit.
-                            var getContext = _httpListener.GetContextAsync();
+                        // There is no way to give a CancellationToken to GCA() so, we need to hack around it a bit.
+                        var getContext = _httpListener.GetContextAsync();
                         getContext.Wait(cancel);
                         var context = getContext.Result;
 
-                            // Kick the request off to a background thread for processing.
-                            _ = Task.Factory.StartNew(async delegate
+                        // Kick the request off to a background thread for processing.
+                        _ = Task.Factory.StartNew(async delegate
                         {
                             var request = context.Request;
                             var response = context.Response;
@@ -132,9 +132,9 @@ namespace Prometheus.BlackboxMetricServer
                                 }
                                 catch (ScrapeFailedException ex)
                                 {
-                                        // This can only happen before anything is written to the stream, so it
-                                        // should still be safe to update the status code and report an error.
-                                        response.StatusCode = 503;
+                                    // This can only happen before anything is written to the stream, so it
+                                    // should still be safe to update the status code and report an error.
+                                    response.StatusCode = 503;
 
                                     if (!string.IsNullOrWhiteSpace(ex.Message))
                                     {
@@ -148,7 +148,7 @@ namespace Prometheus.BlackboxMetricServer
                                 if (!_httpListener.IsListening)
                                     return; // We were shut down.
 
-                                    Trace.WriteLine(string.Format("Error in MetricsServer: {0}", ex));
+                                Trace.WriteLine(string.Format("Error in MetricsServer: {0}", ex));
 
                                 try
                                 {
@@ -156,8 +156,8 @@ namespace Prometheus.BlackboxMetricServer
                                 }
                                 catch
                                 {
-                                        // Might be too late in request processing to set response code, so just ignore.
-                                    }
+                                    // Might be too late in request processing to set response code, so just ignore.
+                                }
                             }
                             finally
                             {
@@ -170,13 +170,11 @@ namespace Prometheus.BlackboxMetricServer
                 finally
                 {
                     _httpListener.Stop();
-                        // This should prevent any currently processed requests from finishing.
-                        _httpListener.Close();
+                    // This should prevent any currently processed requests from finishing.
+                    _httpListener.Close();
                 }
             }, TaskCreationOptions.LongRunning);
         }
-
-
 
         private readonly ConcurrentBag<Action<MetricFactory, NameValueCollection>> _scrapeCallbacks = new ConcurrentBag<Action<MetricFactory, NameValueCollection>>();
         private readonly ConcurrentBag<Func<CancellationToken, MetricFactory, NameValueCollection, Task>> _scrapeAsyncCallbacks = new ConcurrentBag<Func<CancellationToken, MetricFactory, NameValueCollection, Task>>();
@@ -196,6 +194,5 @@ namespace Prometheus.BlackboxMetricServer
 
             _scrapeAsyncCallbacks.Add(callback);
         }
-
     }
 }
