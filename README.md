@@ -1,4 +1,4 @@
-![Nuget](https://img.shields.io/nuget/v/prometheus-net.BlackboxMetricServer)
+[![Nuget](https://img.shields.io/nuget/v/prometheus-net.BlackboxMetricServer)](https://www.nuget.org/packages/prometheus-net.BlackboxMetricServer/)
 
 This .NET library contains a custom `MetricServer` that allows to implement a blackbox exporter and is based on [prometheus-net](https://github.com/prometheus-net/prometheus-net).
 
