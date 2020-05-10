@@ -11,7 +11,7 @@ namespace BackboxMetricServerExample
             server.Start();
 
 
-            server.AddScrapeCallback(async (cancel, metricFactory, queryString) =>
+            server.AddScrapeCallback((metricFactory, queryString) =>
             {
                 var counter = metricFactory.CreateCounter("example_random", "Just a random value", "xyz");
 
