@@ -138,8 +138,8 @@ namespace Prometheus.BlackboxMetricServer
 
                                     if (!string.IsNullOrWhiteSpace(ex.Message))
                                     {
-                                        using (var writer = new StreamWriter(response.OutputStream))
-                                            writer.Write(ex.Message);
+                                        using var writer = new StreamWriter(response.OutputStream);
+                                        writer.Write(ex.Message);
                                     }
                                 }
                             }
