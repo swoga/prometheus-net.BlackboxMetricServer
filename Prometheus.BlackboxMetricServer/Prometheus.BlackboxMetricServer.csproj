@@ -27,7 +27,7 @@ The BlackboxMetricServer creates an empty CollectorRegistry on each scrape, whic
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="prometheus-net" Version="3.5.0" />
+    <PackageReference Include="prometheus-net" Version="3.6.0" />
   </ItemGroup>
 
 </Project>
