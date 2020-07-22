@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Prometheus.BlackboxMetricServer
 {
+    // based on:
+    // Prometheus.NetStandard\CollectorRegistry.cs @ 430051f8
+    // Prometheus.NetStandard\MetricServer.cs @ c3377244
     public class BlackboxMetricServer : IMetricServer
     {
         // The token is cancelled when the handler is instructed to stop.
@@ -89,6 +92,7 @@ namespace Prometheus.BlackboxMetricServer
             {
                 try
                 {
+                    Thread.CurrentThread.Name = "Metric Server";     //Max length 16 chars (Linux limitation)
                     while (!cancel.IsCancellationRequested)
                     {
                         // There is no way to give a CancellationToken to GCA() so, we need to hack around it a bit.
@@ -104,6 +108,7 @@ namespace Prometheus.BlackboxMetricServer
 
                             try
                             {
+                                Thread.CurrentThread.Name = "Metric Process";
 
                                 CollectorRegistry registry = Metrics.NewCustomRegistry();
                                 MetricFactory metricFactory = Metrics.WithCustomRegistry(registry);
@@ -148,7 +153,7 @@ namespace Prometheus.BlackboxMetricServer
                                 if (!_httpListener.IsListening)
                                     return; // We were shut down.
 
-                                Trace.WriteLine(string.Format("Error in MetricsServer: {0}", ex));
+                                Trace.WriteLine(string.Format("Error in {0}: {1}", nameof(MetricServer), ex));
 
                                 try
                                 {
