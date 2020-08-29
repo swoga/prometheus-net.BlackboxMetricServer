@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -122,8 +123,24 @@ namespace Prometheus.BlackboxMetricServer
 
                                     await Task.WhenAll(_scrapeAsyncCallbacks.Select(callback => callback(cancel, metricFactory, request.QueryString)));
 
+                                    var extraTexts = await Task.WhenAll(_scrapeAsyncCallbacksWithExtraText.Select(callback => callback(cancel, metricFactory, request.QueryString)));
+
                                     using (MemoryStream ms = new MemoryStream())
                                     {
+                                        if (extraTexts != null)
+                                        {
+                                            using StreamWriter writer = new StreamWriter(ms, System.Text.Encoding.UTF8, 1024, true);
+
+                                            foreach (var extraText in extraTexts)
+                                            {
+                                                if (string.IsNullOrEmpty(extraText))
+                                                    continue;
+
+                                                await writer.WriteLineAsync(extraText);
+                                                await writer.WriteLineAsync();
+                                            }
+                                        }
+
                                         await registry.CollectAndExportAsTextAsync(ms, cancel);
 
                                         ms.Position = 0;
@@ -181,8 +198,11 @@ namespace Prometheus.BlackboxMetricServer
             }, TaskCreationOptions.LongRunning);
         }
 
+        public delegate Task<string> AsyncCallbackWithExtraText(CancellationToken token, MetricFactory metricFactory, NameValueCollection queryStrings);
+
         private readonly ConcurrentBag<Action<MetricFactory, NameValueCollection>> _scrapeCallbacks = new ConcurrentBag<Action<MetricFactory, NameValueCollection>>();
         private readonly ConcurrentBag<Func<CancellationToken, MetricFactory, NameValueCollection, Task>> _scrapeAsyncCallbacks = new ConcurrentBag<Func<CancellationToken, MetricFactory, NameValueCollection, Task>>();
+        private readonly ConcurrentBag<AsyncCallbackWithExtraText> _scrapeAsyncCallbacksWithExtraText = new ConcurrentBag<AsyncCallbackWithExtraText>();
 
         public void AddScrapeCallback(Action<MetricFactory, NameValueCollection> callback)
         {
@@ -198,6 +218,14 @@ namespace Prometheus.BlackboxMetricServer
                 throw new ArgumentNullException(nameof(callback));
 
             _scrapeAsyncCallbacks.Add(callback);
+        }
+
+        public void AddScrapeCallback(AsyncCallbackWithExtraText callback)
+        {
+            if (callback == null)
+                throw new ArgumentNullException(nameof(callback));
+
+            _scrapeAsyncCallbacksWithExtraText.Add(callback);
         }
     }
 }
